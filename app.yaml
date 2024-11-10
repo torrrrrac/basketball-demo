@@ -1,26 +1,40 @@
-runtime: custom
-env: flex
+# Azure Pipelines YAML file
 
-service: basketball-tracking
+trigger:
+  - main
 
-env_variables:
-  CUDA_VISIBLE_DEVICES: "0"
-  GAE_ENV: "standard"
-  NVIDIA_VISIBLE_DEVICES: "all"
+variables:
+  # Set the Python version to use
+  pythonVersion: '3.9'
 
-resources:
-  cpu: 4
-  memory_gb: 16
+jobs:
 
-# Remove GPU configuration from app.yaml and use instance template instead
-manual_scaling:
-  instances: 1
+- job: RunDetector
+  pool:
+    vmImage: 'ubuntu-latest'
+    
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(pythonVersion)'
+      addToPath: true
 
-beta_settings:
-  machine_type: n1-standard-4  # Standard machine type
+  - name: Install dependencies
+    run: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
 
-liveness_check:
-  initial_delay_sec: 300
-  
-readiness_check:
-  app_start_timeout_sec: 1800
+  - name: Build and deploy to Azure App Service
+    uses: azure/webapps-deploy@v2
+    with:
+      app-name: 'your-app-name'
+      publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+      package: |
+        app.py
+        app.yaml
+        models/person_model.pt
+        models/ball_model.pt
+        deep_sort/deep/checkpoint/ckpt.t7
+        detector/__init__.py
+        detector/realtime_detector.py
+        requirements.txt
