@@ -1,0 +1,26 @@
+runtime: custom
+env: flex
+
+service: basketball-tracking
+
+env_variables:
+  CUDA_VISIBLE_DEVICES: "0"
+  GAE_ENV: "standard"
+  NVIDIA_VISIBLE_DEVICES: "all"
+
+resources:
+  cpu: 4
+  memory_gb: 16
+
+# Remove GPU configuration from app.yaml and use instance template instead
+manual_scaling:
+  instances: 1
+
+beta_settings:
+  machine_type: n1-standard-4  # Standard machine type
+
+liveness_check:
+  initial_delay_sec: 300
+  
+readiness_check:
+  app_start_timeout_sec: 1800

@@ -1,0 +1,31 @@
+# Web Framework
+flask
+gunicorn
+Werkzeug
+
+# Computer Vision & Deep Learning
+opencv-python
+ultralytics
+torch
+torchvision
+numpy
+
+# Deep SORT Dependencies
+
+scipy
+# Cloud & Deployment
+google-cloud-storage
+python-dotenv
+
+# Monitoring & Logging
+google-cloud-logging
+
+# System & Utils
+Pillow
+matplotlib
+seaborn
+pandas
+
+# Optional: GPU Support (uncomment if using CUDA)
+#torch
+#torchvision
