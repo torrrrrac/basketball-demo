@@ -24,16 +24,9 @@ jobs:
       pip install -r requirements.txt
     displayName: 'Install dependencies'
 
-  - task: azure/webapps-deploy@v2
+  - task: AzureWebApp@1
     inputs:
-      app-name: 'your-app-name'
-      publish-profile: $(AZURE_WEBAPP_PUBLISH_PROFILE)
-      package: |
-        app.py
-        models/person_model.pt
-        models/ball_model.pt
-        deep_sort/deep/checkpoint/ckpt.t7
-        detector/__init__.py
-        detector/realtime_detector.py
-        requirements.txt
-    displayName: 'Build and deploy to Azure App Service'
+      azureSubscription: 'YourServiceConnectionName'  # Replace with the name of your service connection in Azure DevOps
+      appName: 'your-app-name'  # Replace with your actual app name in Azure
+      package: '$(System.DefaultWorkingDirectory)'  # This points to the working directory where artifacts are located
+    displayName: 'Deploy to Azure Web App'
