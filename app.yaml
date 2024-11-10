@@ -24,9 +24,19 @@ jobs:
       pip install -r requirements.txt
     displayName: 'Install dependencies'
 
+  # Archive the project files into a .zip file for deployment
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+      includeRootFolder: false
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
+      replaceExistingArchive: true
+    displayName: 'Archive files for deployment'
+
   - task: AzureWebApp@1
     inputs:
-      azureSubscription: 'YourServiceConnectionName'  # Replace with the name of your service connection in Azure DevOps
-      appName: 'your-app-name'  # Replace with your actual app name in Azure
-      package: '$(System.DefaultWorkingDirectory)'  # This points to the working directory where artifacts are located
+      azureSubscription: '<YourServiceConnectionName>'  # Replace with your service connection name
+      appName: 'your-app-name'                          # Replace with your Azure Web App name
+      package: '$(Build.ArtifactStagingDirectory)/app.zip'
     displayName: 'Deploy to Azure Web App'
